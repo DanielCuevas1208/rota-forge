@@ -7,7 +7,7 @@ import rotaforge.score.ConstraintKind
 /** Command line entry point for Rota Forge. */
 object Main {
 
-  private val version = "0.1.0"
+  private val version = "0.2.0"
 
   private val usage: String =
     s"""Rota Forge $version - staff rostering solver

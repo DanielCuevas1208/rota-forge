@@ -28,6 +28,37 @@ class ScorerSuite extends munit.FunSuite {
     assert(result.hardViolations > 0)
   }
 
+  private def dualRoster: rotaforge.model.Roster =
+    TestRosters.roster(
+      extraStaff = Vector(
+        rotaforge.model.Staff("E", "Elena", "R.N.;L.P.N."),
+        rotaforge.model.Staff("F", "Feng", "L.P.N.")
+      ),
+      extraShifts = Vector(
+        rotaforge.model.ShiftDef("A", "Care Assist", 8 * 60, 20 * 60, "L.P.N.", 1)
+      )
+    )
+
+  test("a multi-skilled staff member fills shifts that need either skill") {
+    val roster = dualRoster
+    val grid = TestRosters.grid(
+      roster,
+      Map(
+        "A" -> Map(d0 -> "D"),
+        "E" -> Map(d1 -> "D", d2 -> "A")
+      )
+    )
+    val result = score(grid, roster)
+    assertEquals(result.byKey("skill-match").get.violations, 0)
+  }
+
+  test("a staff member without the skill still violates on a multi-skill shift") {
+    val roster = dualRoster
+    val grid = TestRosters.grid(roster, Map("F" -> Map(d0 -> "D")))
+    val result = score(grid, roster)
+    assertEquals(result.byKey("skill-match").get.violations, 1)
+  }
+
   test("a zero-weight preference blocks an assignment") {
     val roster = TestRosters.roster(Vector(Preference("A", d0, "D", 0)))
     val grid = TestRosters.grid(roster, Map("A" -> Map(d0 -> "D")))

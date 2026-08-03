@@ -33,9 +33,20 @@ jobs:
           grep -q "Constraint scores" out/ci-demo/report.html
           grep -q "Weekend balance" out/ci-demo/report.html
 
-      - name: Upload the demo report
+      - name: Solve the ward example
+        run: sbt -batch -no-colors "run data/ward out/ci-ward"
+
+      - name: Verify the ward outputs
+        run: |
+          test -s out/ci-ward/roster.csv
+          test -s out/ci-ward/report.html
+          grep -q "Skill match" out/ci-ward/report.html
+          grep -q "Tom Walker" out/ci-ward/report.html
+          grep -q "Ana Reyes" out/ci-ward/report.html
+
+      - name: Upload the demo reports
         uses: actions/upload-artifact@v4
         with:
-          name: clinic-report
+          name: reports
           path: out/ci-demo
           if-no-files-found: error

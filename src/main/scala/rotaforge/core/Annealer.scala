@@ -1,6 +1,7 @@
 package rotaforge.core
 
 import rotaforge.model.Preference
+import rotaforge.model.Skills
 import rotaforge.score.Scorer
 import scala.util.Random
 
@@ -174,8 +175,8 @@ final class Annealer(index: RosterIndex, scorer: Scorer) {
       st += 1
     }
     if (a == -1 || b == -1) return null
-    val aSkilled = index.shiftSkill(s2) == "*" || index.staffSkill(a) == index.shiftSkill(s2)
-    val bSkilled = index.shiftSkill(s1) == "*" || index.staffSkill(b) == index.shiftSkill(s1)
+    val aSkilled = Skills.matches(index.shiftSkills(s2), index.staffSkills(a))
+    val bSkilled = Skills.matches(index.shiftSkills(s1), index.staffSkills(b))
     if (!aSkilled || !bSkilled) return null
     if (!canWork(a, day, s2) || !canWork(b, day, s1)) return null
     ShiftSwap(day, a, b, s1, s2)

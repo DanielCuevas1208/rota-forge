@@ -41,9 +41,11 @@ object TestRosters {
   /** Build a roster from the shared fixture, adding preferences. */
   def roster(
       preferences: Vector[rotaforge.model.Preference] = Vector.empty,
-      rulesOverride: Rules = rules
+      rulesOverride: Rules = rules,
+      extraStaff: Vector[Staff] = Vector.empty,
+      extraShifts: Vector[ShiftDef] = Vector.empty
   ): Roster =
-    Roster(days, staff, shifts, preferences, rulesOverride)
+    Roster(days, staff ++ extraStaff, shifts ++ extraShifts, preferences, rulesOverride)
 
   def index(roster: Roster): RosterIndex = new RosterIndex(roster)
 

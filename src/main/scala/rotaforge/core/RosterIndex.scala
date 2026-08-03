@@ -3,6 +3,7 @@ package rotaforge.core
 import java.time.LocalDate
 import rotaforge.model.Roster
 import rotaforge.model.ShiftDef
+import rotaforge.model.Skills
 
 /**
  * Compact integer indexes over a roster.
@@ -22,7 +23,7 @@ final class RosterIndex(val roster: Roster) {
 
   val staffByIndex: Array[String] = roster.staff.map(_.id).toArray
   val staffName: Array[String] = roster.staff.map(_.name).toArray
-  val staffSkill: Array[String] = roster.staff.map(_.skill).toArray
+  val staffSkills: Array[Set[String]] = roster.staff.map(s => Skills.parse(s.skill)).toArray
 
   val daysByIndex: Array[LocalDate] = roster.days.toArray
   val isWeekend: Array[Boolean] =
@@ -32,7 +33,7 @@ final class RosterIndex(val roster: Roster) {
   val shiftName: Array[String] = roster.shifts.map(_.name).toArray
   val startMinute: Array[Int] = roster.shifts.map(_.startMinute).toArray
   val endMinute: Array[Int] = roster.shifts.map(_.endMinute).toArray
-  val shiftSkill: Array[String] = roster.shifts.map(_.skill).toArray
+  val shiftSkills: Array[Set[String]] = roster.shifts.map(s => Skills.parse(s.skill)).toArray
   val headcount: Array[Int] = roster.shifts.map(_.headcount).toArray
 
   def requireValid(): Unit = {

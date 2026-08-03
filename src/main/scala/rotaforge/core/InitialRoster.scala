@@ -2,6 +2,7 @@ package rotaforge.core
 
 import rotaforge.model.Preference
 import rotaforge.model.Rules
+import rotaforge.model.Skills
 
 /**
  * Builds a first feasible schedule with a greedy assignment pass.
@@ -45,7 +46,7 @@ object InitialRoster {
             val eligible =
               duty(st)(day) == -1 &&
                 workload(st) < rules.maxShiftsPerPerson &&
-                (index.shiftSkill(s) == "*" || index.staffSkill(st) == index.shiftSkill(s)) &&
+                Skills.matches(index.shiftSkills(s), index.staffSkills(st)) &&
                 !blocked.contains((st, day, s))
             if (eligible) {
               val key = workload(st)

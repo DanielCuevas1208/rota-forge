@@ -4,6 +4,7 @@ import rotaforge.core.Grid
 import rotaforge.core.RosterIndex
 import rotaforge.model.Preference
 import rotaforge.model.Rules
+import rotaforge.model.Skills
 
 /**
  * Scores a schedule against hard and soft constraints.
@@ -71,8 +72,7 @@ final class Scorer(index: RosterIndex) {
       while (st < nStaff) {
         val s = duty(st)(day)
         if (s != -1) {
-          val required = index.shiftSkill(s)
-          if (required != "*" && required != index.staffSkill(st))
+          if (!Skills.matches(index.shiftSkills(s), index.staffSkills(st)))
             violations += 1
         }
         st += 1
