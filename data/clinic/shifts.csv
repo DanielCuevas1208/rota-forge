@@ -1,0 +1,4 @@
+id,name,start,end,skill,count
+D,Day Shift,07:00,19:00,R.N.,2
+E,Evening Shift,15:00,03:00,R.N.,2
+N,Night Shift,21:00,09:00,R.N.,2

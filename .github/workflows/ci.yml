@@ -1,0 +1,41 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    name: Compile and test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK and sbt
+        uses: coursier/setup-action@v1
+        with:
+          apps: sbt
+          jvm: temurin:21
+
+      - name: Compile and run tests
+        run: sbt -batch -no-colors clean test
+
+      - name: Solve the clinic example
+        run: sbt -batch -no-colors "run data/clinic out/ci-demo"
+
+      - name: Verify the demo outputs
+        run: |
+          test -s out/ci-demo/roster.csv
+          test -s out/ci-demo/report.html
+          grep -q "Hard violations" out/ci-demo/report.html
+          grep -q "Constraint scores" out/ci-demo/report.html
+          grep -q "Weekend balance" out/ci-demo/report.html
+
+      - name: Upload the demo report
+        uses: actions/upload-artifact@v4
+        with:
+          name: clinic-report
+          path: out/ci-demo
+          if-no-files-found: error

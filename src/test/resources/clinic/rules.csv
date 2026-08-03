@@ -1,0 +1,5 @@
+key,value
+maxShiftsPerPerson,8
+maxConsecutiveDays,5
+minRestHours,12
+hardPenalty,1000000

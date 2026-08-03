@@ -1,0 +1,24 @@
+# Build outputs
+target/
+project/target/
+project/project/
+
+# Editor and tooling
+.idea/
+.vscode/
+*.iml
+.bsp/
+.bloop/
+.metals/
+.vscode/
+
+# Solver outputs
+out/
+
+# OS noise
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
