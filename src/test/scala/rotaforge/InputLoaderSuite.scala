@@ -14,7 +14,6 @@ class InputLoaderSuite extends munit.FunSuite {
 
   private val staffCsv =
     "id,name,skill\nN1,Ana Silva,R.N.\nN2,Boris Chen,R.N.\n"
-
   private val daysCsv =
     "date\n2026-05-04\n2026-05-05\n2026-05-06\n"
 
@@ -87,5 +86,16 @@ class InputLoaderSuite extends munit.FunSuite {
       InputLoader.load(dir)
     }
     assert(error.getMessage.contains("staff.csv"))
+  }
+
+  test("a semicolon skill list loads as several skills") {
+    val dir = Files.createTempDirectory("rotaforge-multiskill")
+    write(dir, "staff.csv", "id,name,skill\nN1,Ana Silva,R.N.\nN2,Bo Lin,R.N.;L.P.N.\n")
+    write(dir, "days.csv", daysCsv)
+    write(dir, "shifts.csv", shiftsCsv)
+
+    val index = new rotaforge.core.RosterIndex(InputLoader.load(dir))
+    assertEquals(index.staffSkills(index.staffIdx("N2")), Set("R.N.", "L.P.N."))
+    assertEquals(index.staffSkills(index.staffIdx("N1")), Set("R.N."))
   }
 }
